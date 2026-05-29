@@ -37,7 +37,4 @@ $cocacola->stock  = 50;
 
 echo $cocacola->nombre . "<br>";
 echo $cocacola->precio . "<br>";
-
-
-
 ?>
