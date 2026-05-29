@@ -1,56 +1,62 @@
 <?php
 declare(strict_types=1);
 
+/**
+ * Producto del Minimarket Mass.
+ * Representa un artículo del catálogo: Inca Kola, Costeño, Gloria, etc.
+ */
 class Producto {
     private string $codigo;
     private string $nombre;
-    private float  $precio;
-    private int    $stock;
-    private bool   $disponible;
+    private float $precio;
+    private int $stock;
+
+    private const TASA_IGV = 0.18;
 
     public function __construct(
         string $codigo,
         string $nombre,
-        float  $precio,
-        int    $stock,
-        bool   $disponible = true
+        float $precio,
+        int $stock = 0
     ) {
-        $this->codigo     = $codigo;
-        $this->nombre     = $nombre;
-        $this->precio     = $precio;
-        $this->stock      = $stock;
-        $this->disponible = $disponible;
-    }
-
-    // GETTERS
-    public function getCodigo(): string {
-        return $this->codigo;
-    }
-    public function getNombre(): string {
-        return $this->nombre;
-    }
-    public function getPrecio(): float {
-        return $this->precio;
-    }
-    public function getStock(): int {
-        return $this->stock;
-    }
-    public function getDisponible(): bool {
-        return $this->disponible;
-    }
-
-    // SETTERS
-    public function setPrecio(float $precio): void {
+        if (empty(trim($codigo))) {
+            throw new InvalidArgumentException("El código no puede estar vacío");
+        }
         if ($precio < 0) {
-            throw new Exception("El precio no puede ser negativo");
+            throw new InvalidArgumentException("El precio no puede ser negativo");
         }
+        $this->codigo = $codigo;
+        $this->nombre = $nombre;
         $this->precio = $precio;
+        $this->stock  = max(0, $stock);
     }
-    public function setStock(int $stock): void {
-        if ($stock < 0) {
-            throw new Exception("El stock ha de ser mayor a 0");
+
+    // === GETTERS ===
+
+    public function getCodigo(): string { return $this->codigo; }
+    public function getNombre(): string { return $this->nombre; }
+    public function getPrecio(): float { return $this->precio; }
+    public function getStock():  int   { return $this->stock; }
+
+    // === MÉTODOS DE NEGOCIO ===
+
+    /** Precio con IGV peruano (18%) aplicado */
+    public function precioConIGV(): float {
+        return round($this->precio * (1 + self::TASA_IGV), 2);
+    }
+
+    /** ¿Tiene stock suficiente para una cantidad dada? */
+    public function haySuficienteStock(int $cantidad): bool {
+        return $this->stock >= $cantidad;
+    }
+
+    /** Descuenta cantidad del stock. Devuelve true si pudo */
+    public function descontarStock(int $cantidad): bool {
+        if (!$this->haySuficienteStock($cantidad)) {
+            return false;
         }
-        $this->stock = $stock;
+        $this->stock -= $cantidad;
+        return true;
     }
 }
 ?>
