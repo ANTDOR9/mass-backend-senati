@@ -1,15 +1,15 @@
 <?php
 // ============================================
 // EJERCICIO INTEGRADOR - procesar_venta.php
-// Sistema Mass - Sesión 2
+// Sistema Mass - Sesión 2 - Backend Developer Web SENATI
 // ============================================
 
 // --- DATOS DEL CLIENTE ---
-$cliente_nombre = "María Mamani";
-$cliente_dni = "72345678";
-$cliente_tipo = "frecuente"; // regular / frecuente / vip
+$cliente_nombre = "Anthony Dorly Huilahuaña Chata";
+$cliente_dni    = "72345678";
+$cliente_tipo   = "frecuente"; // regular / frecuente / vip
 
-// --- PRODUCTOS (nombre, categoría, precio unitario, cantidad) ---
+// --- PRODUCTOS ---
 $productos = [
     ["nombre" => "Inca Kola 1.5L",     "categoria" => "bebidas",   "precio" => 4.50, "cantidad" => 3],
     ["nombre" => "Arroz Costeño 1kg",  "categoria" => "abarrotes", "precio" => 3.80, "cantidad" => 2],
@@ -24,20 +24,22 @@ $metodo_pago = "yape"; // efectivo / yape / plin / tarjeta
 // BLOQUE 1: VALIDACIÓN DE DNI
 // ============================================
 if (strlen($cliente_dni) !== 8 || !ctype_digit($cliente_dni)) {
-    echo "<p style='color:red'>ERROR: DNI inválido.</p>";
+    echo "<!DOCTYPE html><html><body style='font-family:Arial;display:flex;justify-content:center;padding:40px'>
+    <div style='background:#fff3cd;border:2px solid #ffc107;padding:20px;border-radius:8px;max-width:400px'>
+    <h3 style='color:#856404;margin:0'>⚠️ DNI Inválido</h3>
+    <p style='color:#856404'>El DNI debe tener exactamente 8 dígitos numéricos.</p>
+    </div></body></html>";
     exit;
 }
 
 // ============================================
 // BLOQUE 2 y 3: IGV Y SUBTOTALES POR PRODUCTO
 // ============================================
-$detalle = [];
+$detalle       = [];
 $gran_subtotal = 0;
-$gran_igv = 0;
+$gran_igv      = 0;
 
 foreach ($productos as $p) {
-
-    // IGV según categoría
     switch ($p["categoria"]) {
         case "abarrotes":
         case "bebidas":
@@ -102,25 +104,26 @@ switch ($cliente_tipo) {
         $pct_cliente = 0;
 }
 
-$pct_total      = $pct_monto + $pct_cliente;
+$pct_total       = $pct_monto + $pct_cliente;
 $monto_descuento = $total_bruto * ($pct_total / 100);
-$total_final    = $total_bruto - $monto_descuento;
+$total_final     = $total_bruto - $monto_descuento;
 
 // ============================================
 // BLOQUE 6: MÉTODO DE PAGO
 // ============================================
+$advertencia_pago = "";
 switch ($metodo_pago) {
     case "yape":
     case "plin":
-        $instruccion_pago = "Mostrar QR del comercio";
+        $instruccion_pago = "📱 Mostrar QR del comercio";
         break;
     case "tarjeta":
-        $instruccion_pago = "Insertar tarjeta en POS";
+        $instruccion_pago = "💳 Insertar tarjeta en POS";
         break;
     default:
-        $instruccion_pago = "Pago en efectivo - exacto preferido";
+        $instruccion_pago = "💵 Pago en efectivo — exacto preferido";
         if ($total_final > 500) {
-            $instruccion_pago .= " ⚠️ Se sugiere otro método para montos altos";
+            $advertencia_pago = "⚠️ Se sugiere otro método para montos altos";
         }
 }
 
@@ -138,91 +141,343 @@ if ($hora >= 5 && $hora <= 11) {
     $saludo = "Tienda cerrada";
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Comprobante - Mass</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprobante de Venta - Mass</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; background:#f4f4f4; display:flex; justify-content:center; padding:30px; }
-        .ticket { background:white; width:520px; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-        .header { text-align:center; border-bottom:3px solid #e30613; padding-bottom:15px; margin-bottom:20px; }
-        .logo { font-size:42px; font-weight:900; color:#e30613; letter-spacing:4px; }
-        .header p { margin:4px 0; color:#555; font-size:13px; }
-        .saludo { background:#fff3f3; border-left:4px solid #e30613; padding:10px 15px; margin-bottom:20px; font-size:14px; }
-        .seccion h3 { font-size:12px; text-transform:uppercase; color:#999; border-bottom:1px solid #eee; padding-bottom:4px; margin-bottom:8px; }
-        .fila { display:flex; justify-content:space-between; font-size:13px; padding:3px 0; }
-        table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:16px; }
-        th { background:#e30613; color:white; padding:7px; text-align:left; font-size:12px; }
-        td { padding:6px 7px; border-bottom:1px solid #f0f0f0; }
-        .total-box { background:#e30613; color:white; padding:15px 20px; border-radius:6px; display:flex; justify-content:space-between; font-size:18px; font-weight:bold; margin-top:16px; }
-        .pago-box { background:#f9f9f9; border:1px solid #ddd; border-radius:6px; padding:12px 16px; margin-top:12px; font-size:14px; text-align:center; }
-        .footer { text-align:center; margin-top:20px; font-size:11px; color:#aaa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --mass-yellow: #F5C200;
+            --mass-blue:   #1E1EAA;
+            --mass-dark:   #111133;
+            --mass-light:  #F5F7FF;
+            --mass-gray:   #6B7280;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            background: var(--mass-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 40px 20px;
+        }
+
+        .ticket {
+            width: 100%;
+            max-width: 560px;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(30,30,170,0.15);
+            animation: fadeUp 0.5s ease both;
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: var(--mass-yellow);
+            padding: 28px 32px 20px;
+            text-align: center;
+        }
+        .header img {
+            height: 72px;
+            width: auto;
+            object-fit: contain;
+            display: block;
+            margin: 0 auto;
+        }
+        .header-sub {
+            margin-top: 8px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--mass-blue);
+            opacity: 0.8;
+        }
+
+        .stripe {
+            background: var(--mass-blue);
+            padding: 10px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .stripe span {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.65);
+        }
+        .stripe strong {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--mass-yellow);
+        }
+
+        .saludo {
+            background: #EEF0FF;
+            border-left: 4px solid var(--mass-blue);
+            padding: 12px 32px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--mass-blue);
+        }
+
+        .body { padding: 24px 32px; }
+
+        .seccion { margin-bottom: 22px; }
+        .seccion-titulo {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--mass-gray);
+            border-bottom: 1px solid #E5E7EB;
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 0;
+            font-size: 14px;
+        }
+        .fila .label { color: var(--mass-gray); }
+        .fila .valor { font-weight: 600; color: var(--mass-dark); }
+
+        .badge {
+            display: inline-block;
+            background: #EEF0FF;
+            color: var(--mass-blue);
+            border: 1px solid var(--mass-blue);
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        thead tr { background: var(--mass-blue); }
+        thead th {
+            padding: 9px 10px;
+            text-align: left;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.8);
+        }
+        tbody tr:nth-child(even) { background: var(--mass-light); }
+        tbody td {
+            padding: 8px 10px;
+            color: #374151;
+            border-bottom: 1px solid #F3F4F6;
+        }
+        tbody td.monto { font-weight: 600; color: var(--mass-dark); text-align: right; }
+
+        .resumen-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+            border-bottom: 1px dashed #E5E7EB;
+        }
+        .resumen-item:last-child { border-bottom: none; }
+        .resumen-item .r-label   { color: var(--mass-gray); }
+        .resumen-item .r-valor   { font-weight: 600; }
+        .resumen-item .r-descuento { color: #16a34a; font-weight: 700; }
+
+        .divider {
+            border: none;
+            border-top: 2px dashed #E5E7EB;
+            margin: 20px 0;
+        }
+
+        .total-box {
+            background: var(--mass-blue);
+            border-radius: 12px;
+            padding: 20px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .total-label {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.75);
+        }
+        .total-monto {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 34px;
+            font-weight: 900;
+            color: var(--mass-yellow);
+        }
+
+        .pago-box {
+            background: var(--mass-light);
+            border: 2px solid var(--mass-blue);
+            border-radius: 10px;
+            padding: 14px 20px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--mass-blue);
+            margin-bottom: 8px;
+        }
+        .advertencia {
+            background: #FFF9E6;
+            border: 1px solid var(--mass-yellow);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-size: 13px;
+            color: #92600A;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .footer {
+            background: var(--mass-blue);
+            padding: 14px 32px;
+            text-align: center;
+        }
+        .footer p {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+        }
     </style>
 </head>
 <body>
 <div class="ticket">
 
     <div class="header">
-        <div class="logo">MASS</div>
-        <p>Minimarket · Arequipa</p>
-        <p>Comprobante de Venta</p>
-        <p><?php echo date("d/m/Y H:i:s"); ?></p>
+        <img src="logo_mass.png" alt="Mass Minimarket">
+        <div class="header-sub">Comprobante de Venta</div>
     </div>
 
-    <div class="saludo"><?php echo $saludo . ", " . $cliente_nombre; ?> 👋</div>
-
-    <div class="seccion">
-        <h3>Cliente</h3>
-        <div class="fila"><span>Nombre</span><span><?php echo $cliente_nombre; ?></span></div>
-        <div class="fila"><span>DNI</span><span><?php echo $cliente_dni; ?></span></div>
-        <div class="fila"><span>Tipo</span><span><?php echo ucfirst($cliente_tipo); ?></span></div>
+    <div class="stripe">
+        <span>Mass Arequipa</span>
+        <strong><?php echo date("d/m/Y H:i:s"); ?></strong>
     </div>
 
-    <div class="seccion">
-        <h3>Detalle de productos</h3>
-        <table>
-            <tr>
-                <th>Producto</th>
-                <th>P.Unit</th>
-                <th>Cant.</th>
-                <th>IGV</th>
-                <th>Total</th>
-            </tr>
-            <?php foreach ($detalle as $d): ?>
-            <tr>
-                <td><?php echo $d["nombre"]; ?></td>
-                <td>S/ <?php echo number_format($d["precio"], 2); ?></td>
-                <td><?php echo $d["cantidad"]; ?></td>
-                <td><?php echo ($d["tasa_igv"] * 100); ?>%</td>
-                <td>S/ <?php echo number_format($d["total_producto"], 2); ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
+    <div class="saludo">
+        👋 <?php echo $saludo . ", <strong>" . $cliente_nombre . "</strong>"; ?>
     </div>
 
-    <div class="seccion">
-        <h3>Resumen</h3>
-        <div class="fila"><span>Subtotal</span><span>S/ <?php echo number_format($gran_subtotal, 2); ?></span></div>
-        <div class="fila"><span>Total IGV</span><span>S/ <?php echo number_format($gran_igv, 2); ?></span></div>
-        <div class="fila"><span>Descuento por monto (<?php echo $pct_monto; ?>%)</span><span>-</span></div>
-        <div class="fila"><span>Descuento por cliente <?php echo ucfirst($cliente_tipo); ?> (<?php echo $pct_cliente; ?>%)</span><span>-</span></div>
-        <div class="fila"><span>Total descuento (<?php echo $pct_total; ?>%)</span><span>- S/ <?php echo number_format($monto_descuento, 2); ?></span></div>
-    </div>
+    <div class="body">
 
-    <div class="total-box">
-        <span>TOTAL A PAGAR</span>
-        <span>S/ <?php echo number_format($total_final, 2); ?></span>
-    </div>
+        <div class="seccion">
+            <div class="seccion-titulo">Datos del cliente</div>
+            <div class="fila">
+                <span class="label">Nombre</span>
+                <span class="valor"><?php echo $cliente_nombre; ?></span>
+            </div>
+            <div class="fila">
+                <span class="label">DNI</span>
+                <span class="valor"><?php echo $cliente_dni; ?></span>
+            </div>
+            <div class="fila">
+                <span class="label">Tipo de cliente</span>
+                <span class="valor"><span class="badge"><?php echo ucfirst($cliente_tipo); ?></span></span>
+            </div>
+        </div>
 
-    <div class="pago-box">
-        💳 <?php echo $instruccion_pago; ?>
+        <div class="seccion">
+            <div class="seccion-titulo">Detalle de productos</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>P.Unit</th>
+                        <th>Cant.</th>
+                        <th>IGV</th>
+                        <th style="text-align:right">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($detalle as $d): ?>
+                    <tr>
+                        <td><?php echo $d["nombre"]; ?></td>
+                        <td>S/ <?php echo number_format($d["precio"], 2); ?></td>
+                        <td><?php echo $d["cantidad"]; ?></td>
+                        <td><?php echo ($d["tasa_igv"] * 100); ?>%</td>
+                        <td class="monto">S/ <?php echo number_format($d["total_producto"], 2); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+
+        <hr class="divider">
+
+        <div class="seccion">
+            <div class="seccion-titulo">Resumen</div>
+            <div class="resumen-item">
+                <span class="r-label">Subtotal</span>
+                <span class="r-valor">S/ <?php echo number_format($gran_subtotal, 2); ?></span>
+            </div>
+            <div class="resumen-item">
+                <span class="r-label">Total IGV</span>
+                <span class="r-valor">S/ <?php echo number_format($gran_igv, 2); ?></span>
+            </div>
+            <div class="resumen-item">
+                <span class="r-label">Descuento por monto (<?php echo $pct_monto; ?>%)</span>
+                <span class="r-descuento">— aplicado</span>
+            </div>
+            <div class="resumen-item">
+                <span class="r-label">Descuento cliente <?php echo ucfirst($cliente_tipo); ?> (<?php echo $pct_cliente; ?>%)</span>
+                <span class="r-descuento">— aplicado</span>
+            </div>
+            <div class="resumen-item">
+                <span class="r-label">Total descuento (<?php echo $pct_total; ?>%)</span>
+                <span class="r-descuento">- S/ <?php echo number_format($monto_descuento, 2); ?></span>
+            </div>
+        </div>
+
+        <div class="total-box">
+            <div class="total-label">Total<br>a pagar</div>
+            <div class="total-monto">S/ <?php echo number_format($total_final, 2); ?></div>
+        </div>
+
+        <div class="pago-box"><?php echo $instruccion_pago; ?></div>
+
+        <?php if ($advertencia_pago): ?>
+        <div class="advertencia"><?php echo $advertencia_pago; ?></div>
+        <?php endif; ?>
+
     </div>
 
     <div class="footer">
-        SENATI · CFP Arequipa · Backend Developer Web<br>
-        Generado el <?php echo date("d/m/Y \a \l\a\s H:i"); ?>
+        <p>SENATI · CFP Arequipa · Backend Developer Web</p>
     </div>
 
 </div>
