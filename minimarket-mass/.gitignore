@@ -1,0 +1,24 @@
+# Dependencias
+/vendor/
+
+# Configuración local / entorno
+.env
+.env.local
+*.env
+
+# Laragon / logs
+*.log
+/logs/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.suo
+*.user
+
+# PHP
+*.cache

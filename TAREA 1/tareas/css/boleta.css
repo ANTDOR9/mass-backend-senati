@@ -1,0 +1,463 @@
+/* ============================================
+   BOLETA DE PAGO — MINIMARKET MASS
+   Estilo: Mass Moderno Animado
+   Autor: Anthony Dorian
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Nunito:wght@300;400;600;700&display=swap');
+
+/* --- Variables de color Mass --- */
+:root {
+    --rojo-mass:      #E30613;
+    --rojo-oscuro:    #a50000;
+    --rojo-suave:     #ff6b6b;
+    --blanco:         #ffffff;
+    --gris-claro:     #f8f9fa;
+    --gris-borde:     #e0e0e0;
+    --gris-texto:     #444444;
+    --negro:          #1a1a1a;
+    --verde-ingreso:  #e8f5e9;
+    --verde-borde:    #2e7d32;
+    --rojo-descuento: #fff0f0;
+    --rojo-desc-borde:#c62828;
+    --sombra:         0 8px 32px rgba(227,6,19,0.15);
+    --sombra-card:    0 4px 20px rgba(0,0,0,0.08);
+}
+
+/* --- Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- Fondo animado con gradiente Mass --- */
+body {
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+
+
+background-color: #0d0d0d;
+background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(227,6,19,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(227,6,19,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 60% 80%, rgba(180,0,0,0.10) 0%, transparent 55%);
+background-size: 100% 100%;
+animation: pulsarDestellos 8s ease-in-out infinite;
+}
+
+@keyframes pulsarDestellos {
+    0%   { background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(227,6,19,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(227,6,19,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(180,0,0,0.10) 0%, transparent 55%); }
+    50%  { background-image:
+                radial-gradient(ellipse at 30% 60%, rgba(227,6,19,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 30%, rgba(227,6,19,0.13) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 70%, rgba(180,0,0,0.15) 0%, transparent 55%); }
+    100% { background-image:
+                radial-gradient(ellipse at 20% 50%, rgba(227,6,19,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, rgba(227,6,19,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(180,0,0,0.10) 0%, transparent 55%); }
+}
+
+
+/* --- Contenedor principal de la boleta --- */
+.boleta {
+    width: 760px;
+    background: var(--blanco);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4), 0 0 0 1px rgba(227,6,19,0.2);
+
+    /* Animación de entrada */
+    animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* --- CABECERA --- */
+.cabecera {
+    background: linear-gradient(135deg, var(--rojo-oscuro) 0%, var(--rojo-mass) 60%, #ff3d3d 100%);
+    padding: 28px 36px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Detalle decorativo en la cabecera */
+.cabecera::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 50%;
+}
+
+.cabecera::after {
+    content: '';
+    position: absolute;
+    bottom: -60px;
+    right: 80px;
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+}
+
+.cabecera-izq {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    z-index: 1;
+}
+
+.logo-mass {
+    width: 180px;
+    height: 60px;
+    object-fit: contain;
+    /* filter: brightness(0) invert(1); */ /* Hace el logo blanco */
+}
+
+.cabecera-titulo {
+    color: var(--blanco);
+}
+
+.cabecera-titulo h1 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.cabecera-titulo p {
+    font-size: 13px;
+    opacity: 0.85;
+    margin-top: 3px;
+}
+
+.cabecera-der {
+    text-align: right;
+    color: var(--blanco);
+    z-index: 1;
+}
+
+.cabecera-der .periodo {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.cabecera-der .fecha {
+    font-size: 12px;
+    opacity: 0.80;
+    margin-top: 4px;
+}
+
+/* --- PERFIL DEL TRABAJADOR --- */
+.perfil {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 36px;
+    background: var(--gris-claro);
+    border-bottom: 2px solid var(--gris-borde);
+    animation: slideUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.perfil-foto {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--rojo-mass);
+    box-shadow: 0 0 0 4px rgba(227,6,19,0.15);
+}
+
+.perfil-info h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--negro);
+    letter-spacing: 0.5px;
+}
+
+.perfil-info p {
+    font-size: 13px;
+    color: #888;
+    margin-top: 2px;
+}
+
+.perfil-badges {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background: var(--rojo-mass);
+    color: var(--blanco);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+}
+
+.badge.gris {
+    background: #555;
+}
+
+/* --- DATOS RÁPIDOS --- */
+.datos-rapidos {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-bottom: 2px solid var(--gris-borde);
+}
+
+.dato-rapido {
+    padding: 14px 20px;
+    border-right: 1px solid var(--gris-borde);
+    text-align: center;
+}
+
+.dato-rapido:last-child {
+    border-right: none;
+}
+
+.dato-rapido label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #999;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.dato-rapido span {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--negro);
+}
+
+/* --- CUERPO --- */
+.cuerpo {
+    padding: 28px 36px;
+}
+
+/* --- SECCIÓN --- */
+.seccion {
+    margin-bottom: 24px;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.seccion:nth-child(1) { animation-delay: 0.15s; }
+.seccion:nth-child(2) { animation-delay: 0.25s; }
+
+.seccion-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.seccion-header.ingresos {
+    background: var(--verde-borde);
+    color: var(--blanco);
+}
+
+.seccion-header.descuentos {
+    background: var(--rojo-desc-borde);
+    color: var(--blanco);
+}
+
+/* --- TABLA --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    box-shadow: var(--sombra-card);
+}
+
+table tr td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+    transition: background 0.2s ease;
+}
+
+/* Filas ingresos */
+.fila-ingreso td {
+    background: var(--verde-ingreso);
+}
+
+.fila-ingreso:hover td {
+    background: #c8e6c9;
+}
+
+/* Filas descuentos */
+.fila-descuento td {
+    background: var(--rojo-descuento);
+}
+
+.fila-descuento:hover td {
+    background: #ffcdd2;
+}
+
+/* Montos alineados a la derecha */
+td.monto {
+    text-align: right;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* Filas de total */
+.fila-total td {
+    font-weight: 700;
+    font-size: 15px;
+    border-bottom: none;
+}
+
+.fila-total.ingresos td {
+    background: var(--verde-borde);
+    color: var(--blanco);
+}
+
+.fila-total.descuentos td {
+    background: var(--rojo-desc-borde);
+    color: var(--blanco);
+}
+
+/* --- SUELDO NETO --- */
+.sueldo-neto {
+    background: linear-gradient(135deg, var(--rojo-oscuro), var(--rojo-mass));
+    color: var(--blanco);
+    border-radius: 12px;
+    padding: 24px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    box-shadow: var(--sombra);
+    position: relative;
+    overflow: hidden;
+    animation: slideUp 0.6s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sueldo-neto::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 50%;
+}
+
+.sueldo-neto .etiqueta {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.sueldo-neto .valor {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 2px;
+
+    /* Efecto glow en el monto */
+    text-shadow: 0 0 20px rgba(255,255,255,0.4);
+    animation: glow 2.5s ease-in-out infinite;
+}
+
+@keyframes glow {
+    0%, 100% { text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+    50%       { text-shadow: 0 0 25px rgba(255,255,255,0.7), 0 0 40px rgba(255,100,100,0.3); }
+}
+
+/* --- SECCIÓN BONUS --- */
+.bonus {
+    background: var(--gris-claro);
+    border: 1px dashed var(--gris-borde);
+    border-radius: 10px;
+    padding: 18px 24px;
+    margin-bottom: 24px;
+    animation: slideUp 0.6s 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.bonus h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #999;
+    margin-bottom: 12px;
+}
+
+.bonus table {
+    box-shadow: none;
+}
+
+.bonus table tr td {
+    background: transparent;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--gris-borde);
+    padding: 9px 10px;
+}
+
+.bonus table tr:last-child td {
+    border-bottom: none;
+}
+
+/* --- FOOTER --- */
+footer {
+    text-align: center;
+    font-size: 11px;
+    color: #aaa;
+    padding: 16px 36px 28px;
+    border-top: 1px solid var(--gris-borde);
+}
+
+/* --- RESPONSIVE básico --- */
+@media (max-width: 780px) {
+    .boleta { width: 100%; }
+    .datos-rapidos { grid-template-columns: repeat(2, 1fr); }
+    .cabecera { flex-direction: column; gap: 12px; text-align: center; }
+    .sueldo-neto { flex-direction: column; gap: 8px; text-align: center; }
+}
