@@ -17,7 +17,6 @@ class AuthController {
             return;
         }
 
-        // Contador de intentos fallidos
         $_SESSION['intentos'] = ($_SESSION['intentos'] ?? 0);
 
         if ($_SESSION['intentos'] >= 3) {
@@ -39,14 +38,17 @@ class AuthController {
             return;
         }
 
-        // Login exitoso — resetear contador
+        // Login exitoso — registrar acceso
+        $repo->registrarAcceso($usuario->getId());
+
         $_SESSION['intentos'] = 0;
         $_SESSION['usuario'] = [
-            'id'       => $usuario->getId(),
-            'username' => $usuario->getUsername(),
-            'nombre'   => $usuario->getNombreCompleto(),
-            'rol'      => $usuario->getRol(),
-            'tienda'   => $usuario->getTienda(),
+            'id'            => $usuario->getId(),
+            'username'      => $usuario->getUsername(),
+            'nombre'        => $usuario->getNombreCompleto(),
+            'rol'           => $usuario->getRol(),
+            'tienda'        => $usuario->getTienda(),
+            'ultimo_acceso' => date('d/m/Y H:i'),
         ];
         header('Location: index.php?accion=catalogo');
         exit;

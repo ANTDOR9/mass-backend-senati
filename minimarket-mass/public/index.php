@@ -28,8 +28,28 @@ switch ($accion) {
         break;
 
     case 'catalogo':
+        requiereLogin();
+        (new ProductoController())->listar();
+        break;
+
+    case 'panel-admin':
+        requiereRol('admin');
+        require __DIR__ . '/../TAREA 5/panel_admin.php';
+        break;
+
+    case 'nuevo-producto':
+        requiereLogin();
+        (new ProductoController())->nuevo();
+        break;
+
+    case 'guardar-producto':
+        requiereLogin();
+        (new ProductoController())->guardar();
+        break;
+
     default:
-        requiereLogin();                      // sin sesión → manda al login
-        (new ProductoController())->listar(); // ← llama al método REAL del controller
+        http_response_code(404);
+        echo '<h1>404 — Ruta no encontrada</h1>';
+        echo '<p><a href="index.php">Volver al inicio</a></p>';
         break;
 }
