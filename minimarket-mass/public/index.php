@@ -49,6 +49,16 @@ switch ($accion) {
         (new ProductoController())->editar();
         break;
 
+    case 'eliminar-producto':
+        requiereLogin();
+        (new ProductoController())->eliminar();
+        break;
+
+    case 'confirmar-eliminar':
+        requiereLogin();
+        (new ProductoController())->confirmarEliminar();
+        break;
+
     case 'actualizar-producto':
         requiereLogin();
         (new ProductoController())->actualizar();

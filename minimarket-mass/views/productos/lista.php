@@ -39,7 +39,10 @@
                     <td style="padding:10px 12px;">
                         <a href="index.php?accion=editar-producto&codigo=<?= urlencode($p->getCodigo()) ?>"
                            style="background:#0066B3;color:white;padding:5px 12px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;">
-                            ✏️ Editar
+                            ✏️ Editar</a>
+                        <a href="index.php?accion=eliminar-producto&codigo=<?= urlencode($p->getCodigo()) ?>"
+                           style="background:#c33;color:white;padding:5px 12px;border-radius:6px;text-decoration:none;font-size:13px;font-weight:600;margin-left:6px;">
+                            🗑️ Eliminar
                         </a>
                     </td>
                 </tr>

@@ -100,4 +100,25 @@ class ProductoController {
         header('Location: index.php?accion=catalogo');
         exit;
     }
+
+    public function eliminar(): void {
+        $codigo   = $_GET['codigo'] ?? '';
+        $producto = $this->repo->buscarPorCodigo($codigo);
+        if ($producto === null) {
+            header('Location: index.php?accion=catalogo');
+            exit;
+        }
+        require __DIR__ . '/../views/productos/eliminar.php';
+    }
+
+    public function confirmarEliminar(): void {
+        $codigo = $_POST['codigo'] ?? '';
+        if ($codigo === '') {
+            header('Location: index.php?accion=catalogo');
+            exit;
+        }
+        $this->repo->eliminar($codigo);
+        header('Location: index.php?accion=catalogo&eliminado=1');
+        exit;
+    }
 }
