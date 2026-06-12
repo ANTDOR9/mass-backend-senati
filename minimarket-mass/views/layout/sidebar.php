@@ -21,6 +21,11 @@
         ➕ Nuevo producto
     </a>
 
+    <a href="index.php?accion=reporte-pdf" target="_blank"
+       style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;margin-bottom:4px;text-decoration:none;font-size:13.5px;font-weight:400;color:#9db8d2;">
+        🧾 Reporte PDF
+    </a>
+
     <?php if (usuarioActual()['rol'] === 'admin'): ?>
     <a href="index.php?accion=panel-admin"
        style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:8px;margin-bottom:4px;text-decoration:none;font-size:13.5px;font-weight:<?= $accionActual === 'panel-admin' ? '700' : '400' ?>;
@@ -31,7 +36,7 @@
     </a>
     <?php endif; ?>
 
-    <div style="margin-top:auto;padding:12px 11px 0;border-top:1px solid #1a3a5c;margin-top:30px;">
+    <div style="padding:12px 11px 0;border-top:1px solid #1a3a5c;margin-top:30px;">
         <p style="font-size:11px;color:#4a6a8a;margin:0;">
             <?= htmlspecialchars(usuarioActual()['tienda'] ?? '') ?>
         </p>
