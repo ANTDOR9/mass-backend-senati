@@ -6,6 +6,7 @@ session_start();
 require_once __DIR__ . '/../helpers/sesion.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/ProductoController.php';
+require_once __DIR__ . '/../controllers/ReporteController.php';
 
 $accion = $_GET['accion'] ?? 'catalogo';
 $auth   = new AuthController();
@@ -22,11 +23,6 @@ switch ($accion) {
 
     case 'logout':
         $auth->logout();
-        break;
-
-    case 'catalogo':
-        requiereLogin();
-        (new ProductoController())->listar();
         break;
 
     case 'panel-admin':
@@ -49,6 +45,11 @@ switch ($accion) {
         (new ProductoController())->editar();
         break;
 
+    case 'actualizar-producto':
+        requiereLogin();
+        (new ProductoController())->actualizar();
+        break;
+
     case 'eliminar-producto':
         requiereLogin();
         (new ProductoController())->eliminar();
@@ -59,14 +60,14 @@ switch ($accion) {
         (new ProductoController())->confirmarEliminar();
         break;
 
-    case 'actualizar-producto':
+    case 'reporte-pdf':
         requiereLogin();
-        (new ProductoController())->actualizar();
+        (new ReporteController())->catalogoPdf();
         break;
 
+    case 'catalogo':
     default:
-        http_response_code(404);
-        echo '<h1>404 — Ruta no encontrada</h1>';
-        echo '<p><a href="index.php">Volver al inicio</a></p>';
+        requiereLogin();
+        (new ProductoController())->listar();
         break;
 }
